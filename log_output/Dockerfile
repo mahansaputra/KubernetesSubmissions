@@ -1,11 +1,7 @@
-FROM node:alpine
+FROM python:3.9-slim
 
-WORKDIR /usr/src/app
+WORKDIR /app
 
-COPY package* ./
+COPY log_output.py .
 
-RUN npm ci
-
-COPY . .
-
-CMD ["npm", "start"]
+CMD ["python", "log_output.py"]
