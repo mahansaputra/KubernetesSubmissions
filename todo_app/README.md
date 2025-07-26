@@ -1,2 +1,2 @@
 # Todo App
-deploy using kubectl apply -f manifests/
+deploy using `kubectl apply -f manifests/`
