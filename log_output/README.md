@@ -1,4 +1,3 @@
 # Log output app
 
-deploy with kubectl apply -f deployment.yaml
-
+deploy with `kubectl apply -f deployment.yaml`
