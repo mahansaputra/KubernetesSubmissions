@@ -15,8 +15,8 @@ spec:
       containers:
         - name: todo-app
           image: mahansa/todo-app:latest  # Change this to your Docker Hub repo
-          env:
-            - name: PORT
-              value: "8080"
-          ports:
-            - containerPort: 8080
+          #env:
+          #  - name: PORT
+          #    value: "8080"
+          #ports:
+          #  - containerPort: 8080
