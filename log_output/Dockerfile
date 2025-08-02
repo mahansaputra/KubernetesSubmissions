@@ -10,6 +10,6 @@ ENV PYTHONUNBUFFERED=1
 
 EXPOSE 3000
 
-COPY app.py .
+COPY log_output.py .
 
-CMD ["python", "app.py"]
+CMD ["python", "log_output.py"]
