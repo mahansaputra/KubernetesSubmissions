@@ -16,5 +16,5 @@ spec:
     spec:
       containers:
       - name: log-output
-        image: log-output:latest
-        imagePullPolicy: Never
+        image: mahansa/log-output:latest
+        #imagePullPolicy: Never
