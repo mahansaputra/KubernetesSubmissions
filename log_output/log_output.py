@@ -3,9 +3,6 @@ from datetime import datetime
 import pytz
 from flask import Flask
 
-# Generate a random UUID string on startup
-random_string = str(uuid.uuid4())
-
 app = Flask(__name__)
 
 def get_timestamp():
@@ -14,6 +11,8 @@ def get_timestamp():
 
 @app.route('/')
 def display_log():
+    # Generate a new random UUID string for each request
+    random_string = str(uuid.uuid4())
     # Return timestamp and random string
     return f"{get_timestamp()}: {random_string}"
 
