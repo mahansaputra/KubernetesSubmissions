@@ -1,7 +1,7 @@
 import os
 from http.server import BaseHTTPRequestHandler, HTTPServer
 
-PORT = int(os.getenv("PORT", "8000"))
+PORT = int(os.getenv("PORT", "3000"))
 
 class SimpleHandler(BaseHTTPRequestHandler):
     def do_GET(self):

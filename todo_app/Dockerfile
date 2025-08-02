@@ -8,7 +8,7 @@ WORKDIR /app
 COPY main.py .
 
 # Set default port as an environment variable
-#ENV PORT=8000
+EXPOSE 3000
 
 # Start the Python HTTP server using the environment port
-CMD ["python", "-u", "main.py"]
+CMD ["python", "main.py"]
