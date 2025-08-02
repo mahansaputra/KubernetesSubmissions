@@ -35,7 +35,7 @@ spec:
   selector:
     app: log-output
   ports:
-    - port: 30080
+    - port: 80
       protocol: TCP
       targetPort: 3000
 ---
@@ -56,4 +56,4 @@ spec:
             service:
               name: log-output-svc
               port:
-                number: 30080
+                number: 80
