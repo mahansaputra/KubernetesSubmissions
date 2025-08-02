@@ -6,14 +6,11 @@ from flask import Flask
 app = Flask(__name__)
 
 def get_timestamp():
-    # Get current time in UTC with ISO 8601 format
     return datetime.now(pytz.UTC).isoformat()
 
 @app.route('/')
 def display_log():
-    # Generate a new random UUID string for each request
-    random_string = str(uuid.uuid4())
-    # Return timestamp and random string
+    random_string = str(uuid.uuid4())  # New UUID per request
     return f"{get_timestamp()}: {random_string}"
 
 if __name__ == "__main__":
