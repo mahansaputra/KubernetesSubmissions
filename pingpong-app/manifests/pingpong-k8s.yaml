@@ -55,6 +55,6 @@ spec:
         pathType: Prefix
         backend:
           service:
-            name: logoutput-service
+            name: log-output-service
             port:
               number: 80
