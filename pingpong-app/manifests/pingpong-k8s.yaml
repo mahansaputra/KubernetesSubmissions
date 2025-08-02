@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: pingpong
-        image: pingpong-app:latest
+        image: mahansa/pingpong-app:latest
         ports:
         - containerPort: 3000
         imagePullPolicy: IfNotPresent
