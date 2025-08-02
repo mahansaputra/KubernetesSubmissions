@@ -12,3 +12,4 @@
 - [1.4.](https://github.com/mahansaputra/KubernetesSubmissions/tree/1.4/todo_app)
 - [1.7.](https://github.com/mahansaputra/KubernetesSubmissions/tree/1.7/hash)
 - [1.8.](https://github.com/mahansaputra/KubernetesSubmissions/tree/1.8/hash)
+- [1.9.](https://github.com/mahansaputra/KubernetesSubmissions/tree/1.9/pingpong-app)
