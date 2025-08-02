@@ -1,0 +1,60 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pingpong-deployment
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pingpong
+  template:
+    metadata:
+      labels:
+        app: pingpong
+    spec:
+      containers:
+      - name: pingpong
+        image: pingpong-app:latest
+        ports:
+        - containerPort: 3000
+        imagePullPolicy: IfNotPresent
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: pingpong-service
+  namespace: default
+spec:
+  selector:
+    app: pingpong
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 3000
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: shared-ingress
+  namespace: default
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  rules:
+  - http:
+      paths:
+      - path: /pingpong
+        pathType: Prefix
+        backend:
+          service:
+            name: pingpong-service
+            port:
+              number: 80
+      - path: /log
+        pathType: Prefix
+        backend:
+          service:
+            name: logoutput-service
+            port:
+              number: 80
