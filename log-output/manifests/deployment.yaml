@@ -19,7 +19,7 @@ spec:
         ports:
         - containerPort: 3000
         volumeMounts:
-        - name: shared-data
+        - name: counter
           mountPath: /app/data
         - name: log-storage
           mountPath: /app/shared
@@ -44,7 +44,7 @@ spec:
             memory: "128Mi"
             cpu: "250m"
       volumes:
-      - name: shared-data
+      - name: counter
         persistentVolumeClaim:
           claimName: shared-data-claim
       - name: log-storage
