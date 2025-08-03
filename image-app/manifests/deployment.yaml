@@ -1,29 +1,33 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: images-dep
+  name: project-app
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: images
+      app: project-app
   template:
     metadata:
       labels:
-        app: images
+        app: project-app
     spec:
-      volumes:
-        - name: shared-image
-          persistentVolumeClaim:
-            claimName: image-claim
       containers:
-        - name: image-finder
-          image: jakousa/dwk-app3-image-finder:b7fc18de2376da80ff0cfc72cf581a9f94d10e64
+        - name: project-app
+          image: mahansa/project-app:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
           volumeMounts:
-            - name: shared-image
-              mountPath: /usr/src/app/files
-        - name: image-response
-          image: jakousa/dwk-app3-image-response:b7fc18de2376da80ff0cfc72cf581a9f94d10e64
-          volumeMounts:
-            - name: shared-image
-              mountPath: /usr/src/app/files
+            - name: image-cache
+              mountPath: "/app/cache"
+          lifecycle:
+            postStart:
+              exec:
+                command: ["/bin/sh", "-c", "chmod 777 /app/cache"]
+      volumes:
+        - name: image-cache
+          persistentVolumeClaim:
+            claimName: image-pvc
+      nodeSelector:
+        kubernetes.io/hostname: k3d-k3s-default-agent-0
