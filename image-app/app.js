@@ -49,7 +49,7 @@ const server = http.createServer(async (req, res) => {
 
     const html = `
     <!DOCTYPE html>
-    <html>
+    <html lang="">
     <head><title>The project App</title></head>
     <body style="text-align: center;">
       <h1>The project App</h1>
