@@ -17,7 +17,7 @@ spec:
           image: mahansa/project-app:latest
           imagePullPolicy: IfNotPresent
           ports:
-            - containerPort: 8080
+            - containerPort: 3000
           volumeMounts:
             - name: image-cache
               mountPath: "/app/cache"
