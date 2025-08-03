@@ -1,0 +1,12 @@
+{
+  "name": "project-app",
+  "version": "1.0.0",
+  "description": "A Node.js app to display cached images",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "dependencies": {},
+  "author": "Your Name",
+  "license": "MIT"
+}
