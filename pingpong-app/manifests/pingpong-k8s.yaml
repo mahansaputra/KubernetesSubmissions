@@ -13,12 +13,19 @@ spec:
       labels:
         app: pingpong
     spec:
+      volumes:
+        - name: volume
+          persistentVolumeClaim:
+            claimName: shared-data-claim
       containers:
       - name: pingpong
         image: mahansa/pingpong-app:latest
         ports:
         - containerPort: 3000
         imagePullPolicy: IfNotPresent
+        volumeMounts:
+          - mountPath: /app/data/counter.txt
+            name: counter
 ---
 apiVersion: v1
 kind: Service

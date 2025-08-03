@@ -28,11 +28,20 @@ async function initCounter() {
 async function updateCounter() {
   try {
     await fs.writeFile(counterFilePath, counter.toString());
+    console.log(`Updated counter to ${counter}`);
   } catch (err) {
     console.error('Error writing counter to file:', err);
   }
 }
 
+// Add root endpoint to handle requests without /pingpong path due to Ingress rewrite
+app.get('/', async (req, res) => {
+  res.send(`pong ${counter}`);
+  counter++;
+  await updateCounter();
+});
+
+// Original endpoint
 app.get('/pingpong', async (req, res) => {
   res.send(`pong ${counter}`);
   counter++;

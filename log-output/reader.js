@@ -28,9 +28,10 @@ app.get('/', async (req, res) => {
             console.error('Error reading counter file:', err);
         }
 
-        // Format response
+        // Format response with proper line breaks
+        // Ensure the timestamp, UUID and ping/pong count are formatted correctly
         const timestamp = new Date().toISOString();
-        const responseContent = `${timestamp}: ${latestLog}\nPing / Pongs: ${pingPongCount}`;
+        const responseContent = `${timestamp}: ${latestLog}.\nPing / Pongs: ${pingPongCount}`;
 
         res.send(responseContent);
     } catch (err) {

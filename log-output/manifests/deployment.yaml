@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: reader
-        image: log-output
+        image: mahansa/log-output:latest
         command: ["node", "reader.js"]
         ports:
         - containerPort: 3000
@@ -31,7 +31,7 @@ spec:
             memory: "128Mi"
             cpu: "250m"
       - name: writer
-        image: log-output
+        image: mahansa/log-output:latest
         command: ["node", "writer.js"]
         volumeMounts:
         - name: log-storage

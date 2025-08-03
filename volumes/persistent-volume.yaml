@@ -1,14 +1,21 @@
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: shared-data-pv
-  labels:
-    type: local
+  name: example-pv
 spec:
-  storageClassName: manual
+  storageClassName: my-example-pv # this is the name you are using later to claim this volume
   capacity:
-    storage: 100Mi
+    storage: 1Gi # Could be e.q. 500Gi. Small amount is to preserve space when testing locally
+  volumeMode: Filesystem # This declares that it will be mounted into pods as a directory
   accessModes:
-    - ReadWriteMany
-  hostPath:
-    path: "/tmp/kube-data"
+    - ReadWriteOnce
+  local:
+    path: /tmp/kube
+  nodeAffinity: ## This is only required for local, it defines which nodes can access it
+    required:
+      nodeSelectorTerms:
+        - matchExpressions:
+            - key: kubernetes.io/hostname
+              operator: In
+              values:
+                - k3d-k3s-default-agent-0
