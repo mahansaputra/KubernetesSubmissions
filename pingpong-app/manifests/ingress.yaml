@@ -16,10 +16,10 @@ spec:
             name: pingpong-service
             port:
               number: 80
-      - path: /log
-        pathType: Prefix
-        backend:
-          service:
-            name: log-output-service
-            port:
-              number: 80
+#      - path: /log
+#        pathType: Prefix
+#        backend:
+#          service:
+#            name: log-output-service
+#            port:
+#              number: 80
