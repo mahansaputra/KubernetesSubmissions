@@ -1,14 +1,14 @@
 const fs = require('fs').promises;
 const { v4: uuidv4 } = require('uuid');
-const path = '/shared/data.txt';
+const path = '/app/shared/data.txt';
 
 async function writeToFile() {
     const uuid = uuidv4();
-    const timestamp = new Date().toISOString();
-    const content = `${uuid} - ${timestamp}\n`;
+    // Store only the UUID as needed for the expected output format
+    const content = `${uuid}`;
 
     try {
-        await fs.appendFile(path, content);
+        await fs.writeFile(path, content);
         console.log(`Wrote to file: ${content.trim()}`);
     } catch (err) {
         console.error('Error writing to file:', err);
@@ -16,11 +16,11 @@ async function writeToFile() {
 }
 
 async function main() {
-    // Create file if it doesn't exist
+    // Create directory if it doesn't exist
     try {
-        await fs.access(path);
-    } catch {
-        await fs.writeFile(path, '');
+        await fs.mkdir('/app/shared', { recursive: true });
+    } catch (err) {
+        console.error('Error creating directory:', err);
     }
 
     // Write immediately on startup

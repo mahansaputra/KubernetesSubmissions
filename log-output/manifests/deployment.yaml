@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: log-output
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: log-output
+  template:
+    metadata:
+      labels:
+        app: log-output
+    spec:
+      containers:
+      - name: reader
+        image: log-output
+        command: ["node", "reader.js"]
+        ports:
+        - containerPort: 3000
+        volumeMounts:
+        - name: shared-data
+          mountPath: /app/data
+        - name: log-storage
+          mountPath: /app/shared
+        resources:
+          limits:
+            memory: "256Mi"
+            cpu: "500m"
+          requests:
+            memory: "128Mi"
+            cpu: "250m"
+      - name: writer
+        image: log-output
+        command: ["node", "writer.js"]
+        volumeMounts:
+        - name: log-storage
+          mountPath: /app/shared
+        resources:
+          limits:
+            memory: "256Mi"
+            cpu: "500m"
+          requests:
+            memory: "128Mi"
+            cpu: "250m"
+      volumes:
+      - name: shared-data
+        persistentVolumeClaim:
+          claimName: shared-data-claim
+      - name: log-storage
+        emptyDir: {}
