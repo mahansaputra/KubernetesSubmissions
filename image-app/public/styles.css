@@ -1,0 +1,29 @@
+body {
+  text-align: center;
+  font-family: Arial, sans-serif;
+}
+
+.main-image {
+  max-width: 50%;
+  height: auto;
+}
+
+.todo-input {
+  width: 300px;
+  padding: 5px;
+}
+
+.todo-form {
+  margin: 20px 0;
+}
+
+.todo-list {
+  list-style-type: none;
+  padding: 0;
+  text-align: left;
+  display: inline-block;
+}
+
+footer {
+  margin-top: 20px;
+}
