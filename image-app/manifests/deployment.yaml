@@ -15,6 +15,7 @@ spec:
       containers:
         - name: project-app
           image: mahansa/project-app:latest
+          imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8080
           volumeMounts:

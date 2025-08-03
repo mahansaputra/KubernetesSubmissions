@@ -1,6 +1,8 @@
 const http = require('http');
 const fs = require('fs').promises;
 const path = require('path');
+const { exec } = require('child_process');
+
 const PORT = 8080;
 const CACHE_DIR = path.join(__dirname, 'cache');
 const CACHE_DURATION = 10 * 60 * 1000; // 10 minutes in milliseconds
@@ -45,9 +47,30 @@ const server = http.createServer(async (req, res) => {
         setTimeout(() => fs.unlink(imagePath).catch(console.error), CACHE_DURATION + GRACE_PERIOD);
     }
 
-    const imageStream = await fs.readFile(imagePath);
-    res.writeHead(200, { 'Content-Type': 'image/jpeg' });
-    res.end(imageStream);
+    const html = `
+    <!DOCTYPE html>
+    <html>
+    <head><title>The project App</title></head>
+    <body style="text-align: center;">
+      <h1>The project App</h1>
+      <img src="/image" alt="Random Image" style="max-width: 50%; height: auto;">
+      <footer><p>DevOps with Kubernetes 2025</p></footer>
+    </body>
+    </html>
+  `;
+    res.writeHead(200, { 'Content-Type': 'text/html' });
+    res.write(html);
+    res.end();
+});
+
+// Serve the cached image
+server.on('request', async (req, res) => {
+    if (req.url === '/image') {
+        const imagePath = await getCachedImage() || await fetchNewImage();
+        const imageStream = await fs.readFile(imagePath);
+        res.writeHead(200, { 'Content-Type': 'image/jpeg' });
+        res.end(imageStream);
+    }
 });
 
 // Test container shutdown by logging state
