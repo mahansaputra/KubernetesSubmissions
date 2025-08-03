@@ -12,10 +12,6 @@ COPY app.js ./
 # Create cache directory with appropriate permissions
 RUN mkdir -p cache && chmod 777 cache
 
-EXPOSE 8080
-
-# Healthcheck to verify the application is running
-HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
-  CMD wget --no-verbose --tries=1 --spider http://localhost:8080/ || exit 1
+EXPOSE 3000
 
 CMD ["node", "app.js"]
