@@ -4,14 +4,17 @@ const path = require('path');
 
 const PORT = 3000;
 const CACHE_DIR = path.join(__dirname, 'cache');
+const PUBLIC_DIR = path.join(__dirname, 'public');
+const TEMPLATES_DIR = path.join(__dirname, 'templates');
 const CACHE_DURATION = 10 * 60 * 1000; // 10 minutes in milliseconds
 const GRACE_PERIOD = CACHE_DURATION; // Additional 10 minutes grace period
 
-async function ensureCacheDir() {
+async function ensureDirectories() {
     try {
         await fs.mkdir(CACHE_DIR, { recursive: true });
+        await fs.mkdir(PUBLIC_DIR, { recursive: true });
     } catch (error) {
-        console.error('Error creating cache directory:', error);
+        console.error('Error creating directories:', error);
     }
 }
 
@@ -37,50 +40,71 @@ async function fetchNewImage() {
     return filePath;
 }
 
-const server = http.createServer(async (req, res) => {
-    await ensureCacheDir();
+async function serveStaticFile(req, res) {
+    const filePath = path.join(PUBLIC_DIR, req.url);
+    try {
+        const data = await fs.readFile(filePath);
+        const ext = path.extname(filePath);
+        const contentType = {
+            '.css': 'text/css',
+            '.js': 'text/javascript',
+            '.png': 'image/png',
+            '.jpg': 'image/jpeg',
+            '.ico': 'image/x-icon'
+        }[ext] || 'text/plain';
 
-    if (req.url === '/image') {
-        let imagePath = await getCachedImage();
-        if (!imagePath) {
-            imagePath = await fetchNewImage();
-            setTimeout(() => fs.unlink(imagePath).catch(console.error), CACHE_DURATION + GRACE_PERIOD);
-        }
-        const imageStream = await fs.readFile(imagePath);
-        res.writeHead(200, { 'Content-Type': 'image/jpeg' });
-        res.end(imageStream);
-        return;
+        res.writeHead(200, { 'Content-Type': contentType });
+        res.end(data);
+        return true;
+    } catch (error) {
+        return false;
     }
+}
 
+async function serveImage(res) {
     let imagePath = await getCachedImage();
     if (!imagePath) {
         imagePath = await fetchNewImage();
-        setTimeout(() => fs.unlink(imagePath).catch(console.error), CACHE_DURATION + GRACE_PERIOD);
+        setTimeout(
+            () => fs.unlink(imagePath).catch(console.error), 
+            CACHE_DURATION + GRACE_PERIOD
+        );
+    }
+    const imageStream = await fs.readFile(imagePath);
+    res.writeHead(200, { 'Content-Type': 'image/jpeg' });
+    res.end(imageStream);
+}
+
+async function serveHomePage(res) {
+    try {
+        const templatePath = path.join(TEMPLATES_DIR, 'index.html');
+        const html = await fs.readFile(templatePath, 'utf8');
+        res.writeHead(200, { 'Content-Type': 'text/html' });
+        res.end(html);
+    } catch (error) {
+        console.error('Error serving home page:', error);
+        res.writeHead(500, { 'Content-Type': 'text/plain' });
+        res.end('Internal Server Error');
+    }
+}
+
+const server = http.createServer(async (req, res) => {
+    await ensureDirectories();
+
+    // Serve static files
+    if (req.url.match(/\.(css|js|png|jpg|ico)$/)) {
+        const served = await serveStaticFile(req, res);
+        if (served) return;
     }
 
-    const html = `
-    <!DOCTYPE html>
-    <html lang="en">
-    <head><title>The project App</title></head>
-    <body style="text-align: center; font-family: Arial, sans-serif;">
-      <h1>The project App</h1>
-      <img src="/image" alt="Random Image" style="max-width: 50%; height: auto;">
-      <div>
-        <input type="text" id="todoInput" maxlength="140" placeholder="Create todo" style="width: 300px; padding: 5px;">
-        <button id="sendButton">Send</button>
-      </div>
-      <ul id="todoList" style="list-style-type: none; padding: 0; text-align: left; display: inline-block;">
-        <li>Create todo</li>
-        <li>Learn JavaScript</li>
-        <li>Learn React</li>
-        <li>Build a project</li>
-      </ul>
-      <footer><p>DevOps with Kubernetes 2025</p></footer>
-    </body>
-    </html>
-  `;
-    res.writeHead(200, { 'Content-Type': 'text/html' });
-    res.end(html);
+    // Serve image
+    if (req.url === '/image') {
+        await serveImage(res);
+        return;
+    }
+
+    // Serve home page
+    await serveHomePage(res);
 });
 
 // Test container shutdown by logging state
@@ -89,9 +113,10 @@ process.on('SIGTERM', () => {
     process.exit(0);
 });
 
+// Refresh image cache hourly
 setInterval(async () => {
     const imagePath = await getCachedImage();
     if (!imagePath) await fetchNewImage();
-}, 60 * 60 * 1000); // Refresh hourly
+}, 60 * 60 * 1000);
 
 server.listen(PORT, () => console.log(`Server running on port ${PORT}`));
