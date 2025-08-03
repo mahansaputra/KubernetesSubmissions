@@ -1,9 +1,7 @@
-FROM python:slim
+FROM node:18-alpine
 WORKDIR /app
-RUN apt-get update && \
-	apt-get upgrade -y && \
-	apt-get clean && \
-	rm -rf /var/lib/apt/lists/*
-COPY . .
-RUN pip install --no-cache-dir -r requirements.txt
-CMD ["python", "log_output.py"]
+COPY package.json .
+RUN npm install
+COPY writer.js .
+COPY reader.js .
+CMD ["npm", "start:reader"]

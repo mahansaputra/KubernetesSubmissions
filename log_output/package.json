@@ -1,0 +1,14 @@
+{
+  "name": "log-output-app",
+  "version": "1.0.0",
+  "description": "Application with writer and reader containers for logging",
+  "main": "reader.js",
+  "dependencies": {
+    "express": "^4.21.1",
+    "uuid": "^10.0.0"
+  },
+  "scripts": {
+    "start:reader": "node reader.js",
+    "start:writer": "node writer.js"
+  }
+}
