@@ -1,15 +1,42 @@
 const express = require('express');
 const fs = require('fs').promises;
-const path = '/shared/data.txt';
+const logPath = '/app/shared/data.txt';
+const counterPath = '/app/data/counter.txt';
 const app = express();
 
-app.get('/logs', async (req, res) => {
+app.get('/', async (req, res) => {
     try {
-        const content = await fs.readFile(path, 'utf8');
-        res.send(content || 'No logs yet');
+        // Read the timestamp and UUID from log file
+        let logContent = '';
+        try {
+            logContent = await fs.readFile(logPath, 'utf8');
+        } catch (err) {
+            console.error('Error reading log file:', err);
+            logContent = 'No logs yet';
+        }
+
+        // Parse the latest log entry (first line)
+        const logLines = logContent.trim().split('\n');
+        const latestLog = logLines.length > 0 ? logLines[logLines.length - 1] : '';
+
+        // Read the ping pong counter
+        let pingPongCount = 0;
+        try {
+            const counterContent = await fs.readFile(counterPath, 'utf8');
+            pingPongCount = parseInt(counterContent.trim(), 10) || 0;
+        } catch (err) {
+            console.error('Error reading counter file:', err);
+        }
+
+        // Format response with proper line breaks
+        // Ensure the timestamp, UUID and ping/pong count are formatted correctly
+        const timestamp = new Date().toISOString();
+        const responseContent = `${timestamp}: ${latestLog}.\nPing / Pongs: ${pingPongCount}`;
+
+        res.send(responseContent);
     } catch (err) {
-        console.error('Error reading file:', err);
-        res.status(500).send('Error reading logs');
+        console.error('Error generating response:', err);
+        res.status(500).send('Error generating response');
     }
 });
 
