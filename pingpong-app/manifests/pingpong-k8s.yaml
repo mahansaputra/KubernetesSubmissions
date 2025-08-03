@@ -14,7 +14,7 @@ spec:
         app: pingpong
     spec:
       volumes:
-        - name: volume
+        - name: counter
           persistentVolumeClaim:
             claimName: shared-data-claim
       containers:
@@ -24,7 +24,7 @@ spec:
         - containerPort: 3000
         imagePullPolicy: IfNotPresent
         volumeMounts:
-          - mountPath: /app/data/counter.txt
+          - mountPath: /app/data
             name: counter
 ---
 apiVersion: v1
