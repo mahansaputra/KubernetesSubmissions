@@ -22,7 +22,7 @@ const server = http.createServer(async (req, res) => {
             const fileContent = fs.readFileSync('/app/config/information.txt', 'utf8');
             const envMessage = process.env.MESSAGE || 'default message';
             res.writeHead(200, { 'Content-Type': 'text/plain' });
-            res.end(`${timestamp}: ${currentUuid}.\nPing / Pongs: ${pongs}\nEnv Message: ${envMessage}\nFile Content: ${fileContent}`);
+            res.end(`file content: ${fileContent}\nenv message: ${envMessage}\n${timestamp}: ${currentUuid}.\nPing / Pongs: ${pongs}`);
         } catch (error) {
             res.writeHead(500, { 'Content-Type': 'text/plain' });
             res.end('Error fetching data');
