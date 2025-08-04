@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: pingpong-deployment
+  namespace: exercises
 spec:
   replicas: 1
   selector:
@@ -15,7 +16,7 @@ spec:
       containers:
       - name: pingpong
         image: mahansa/pingpong:latest
-        imagePullPolicy: Never #fNotPresent
+        imagePullPolicy: Never #IfNotPresent
         ports:
         - containerPort: 80
 ---
@@ -23,6 +24,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: pingpong-service
+  namespace: exercises
 spec:
   selector:
     app: pingpong
@@ -36,6 +38,7 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: pingpong-ingress
+  namespace: exercises
 spec:
   rules:
   - http:
