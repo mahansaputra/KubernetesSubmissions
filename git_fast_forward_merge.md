@@ -31,7 +31,7 @@ To perform a fast-forward merge directly on the remote repository, use the hosti
     ```bash
     git fetch origin
     git checkout new-branch
-    git rebase origin/master
+    git rebase origin master
     git push --force origin new-branch
     ```
     **Note**: Use `--force` cautiously in collaborative environments, as it rewrites branch history.
