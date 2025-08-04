@@ -2,7 +2,6 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: log-output-deployment
-  namespace: exercises
 spec:
   replicas: 1
   selector:
@@ -16,15 +15,30 @@ spec:
       containers:
       - name: log-output
         image: mahansa/log-output:latest
-        imagePullPolicy: Never #IfNotPresent
+        imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 80
+        env:
+        - name: MESSAGE
+          valueFrom:
+            configMapKeyRef:
+              name: log-output-config
+              key: MESSAGE
+        volumeMounts:
+        - name: config-volume
+          mountPath: "/app/config"
+      volumes:
+      - name: config-volume
+        configMap:
+          name: log-output-config
+          items:
+          - key: information.txt
+            path: information.txt
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: log-output-service
-  namespace: exercises
 spec:
   selector:
     app: log-output
@@ -38,7 +52,6 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: log-output-ingress
-  namespace: exercises
 spec:
   rules:
   - http:
