@@ -14,7 +14,8 @@ spec:
     spec:
       containers:
       - name: pingpong
-        image: pingpong:latest
+        image: mahansa/pingpong:latest
+        imagePullPolicy: if-not-present
         ports:
         - containerPort: 80
 ---
