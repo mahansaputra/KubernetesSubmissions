@@ -1,0 +1,8 @@
+{
+  "name": "pingpong",
+  "version": "1.0.0",
+  "main": "pingpong.js",
+  "scripts": {
+    "start": "node pingpong.js"
+  }
+}
