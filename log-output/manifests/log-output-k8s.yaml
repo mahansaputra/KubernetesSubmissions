@@ -15,7 +15,7 @@ spec:
       containers:
       - name: log-output
         image: mahansa/log-output:latest
-        imagePullPolicy: if-not-present
+        imagePullPolicy: Never #IfNotPresent
         ports:
         - containerPort: 80
 ---
