@@ -17,3 +17,6 @@
 - [1.11.](https://github.com/mahansaputra/KubernetesSubmissions/tree/1.11/pingpong-app)
 - [1.12.](https://github.com/mahansaputra/KubernetesSubmissions/tree/1.12/image-app)
 - [1.13.](https://github.com/mahansaputra/KubernetesSubmissions/tree/1.13/image-app)
+
+- [2.1.](https://github.com/mahansaputra/KubernetesSubmissions/tree/2.1/log-output)
+- [2.1.](https://github.com/mahansaputra/KubernetesSubmissions/tree/2.1/pingpong)
