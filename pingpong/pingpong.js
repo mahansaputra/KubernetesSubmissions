@@ -42,7 +42,7 @@ http.createServer(async (req, res) => {
     res.writeHead(404, { 'Content-Type': 'text/plain' });
     res.end('Not Found');
   }
-}).listen(process.env.PORT || 80, () => {
-  console.log(`Ping pong app listening on port ${process.env.PORT || 80}`);
+}).listen(process.env.PORT, () => {
+  console.log(`Ping pong app listening on port ${process.env.PORT}`);
   initializeCounter().catch(err => console.error('Failed to initialize counter:', err));
 });
