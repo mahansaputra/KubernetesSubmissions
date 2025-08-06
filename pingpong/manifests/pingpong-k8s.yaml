@@ -13,12 +13,45 @@ spec:
       labels:
         app: pingpong
     spec:
+      initContainers:
+      - name: wait-for-postgres
+        image: postgres:16.2
+        env:
+        - name: PGHOST
+          valueFrom:
+            configMapKeyRef:
+              name: pingpong-config
+              key: POSTGRES_HOST
+        - name: PGPORT
+          valueFrom:
+            configMapKeyRef:
+              name: pingpong-config
+              key: POSTGRES_PORT
+        - name: PGUSER
+          valueFrom:
+            configMapKeyRef:
+              name: pingpong-config
+              key: POSTGRES_USER
+        - name: PGPASSWORD
+          valueFrom:
+            configMapKeyRef:
+              name: pingpong-config
+              key: POSTGRES_PASSWORD
+        - name: PGDATABASE
+          valueFrom:
+            configMapKeyRef:
+              name: pingpong-config
+              key: POSTGRES_DB
+        command: ['sh', '-c', 'until pg_isready -h $PGHOST -p $PGPORT -U $PGUSER -d $PGDATABASE; do echo waiting for postgres; sleep 2; done;']
       containers:
       - name: pingpong
         image: mahansa/pingpong:latest
-        imagePullPolicy: Never #IfNotPresent
+        imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 80
+        envFrom:
+        - configMapRef:
+            name: pingpong-config
 ---
 apiVersion: v1
 kind: Service
