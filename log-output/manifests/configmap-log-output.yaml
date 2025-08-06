@@ -7,3 +7,5 @@ data:
   information.txt: |
     this text is from file
   MESSAGE: hello world
+  PINGPONG_URL: http://pingpong-service:80/pingpong
+  LOG_OUTPUT_PORT: "80"
