@@ -23,3 +23,4 @@
 - [2.3.](https://github.com/mahansaputra/KubernetesSubmissions/tree/2.3/pingpong)
 - [2.5.](https://github.com/mahansaputra/KubernetesSubmissions/tree/2.5/log-output)
 - [2.6.](https://github.com/mahansaputra/KubernetesSubmissions/tree/2.6/log-output)
+- [2.7.](https://github.com/mahansaputra/KubernetesSubmissions/tree/2.7/pingpong)
