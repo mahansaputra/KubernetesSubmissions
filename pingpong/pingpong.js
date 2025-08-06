@@ -5,8 +5,11 @@ const pool = new Pool({
   user: process.env.POSTGRES_USER,
   host: process.env.POSTGRES_HOST,
   database: process.env.POSTGRES_DB,
-  password: process.env.POSTGRES_PASSWORD,
+  password: process.env.POSTGRES_PASSWORD ,
   port: process.env.POSTGRES_PORT,
+  max: 10,
+  idleTimeoutMillis: 30000,
+  connectionTimeoutMillis: 2000,
 });
 
 async function initializeCounter() {
@@ -17,12 +20,12 @@ async function initializeCounter() {
     if (res.rows.length === 0) {
       await client.query('INSERT INTO counters (pongs) VALUES (0)');
     }
+  } catch (err) {
+    console.error('Init error:', err.stack);
   } finally {
     client.release();
   }
 }
-
-let pongs = 0;
 
 http.createServer(async (req, res) => {
   if (req.method === 'GET' && req.url === '/pingpong') {
@@ -30,24 +33,26 @@ http.createServer(async (req, res) => {
     try {
       const result = await client.query('UPDATE counters SET pongs = pongs + 1 RETURNING pongs');
       const pongs = result.rows[0].pongs;
-      res.writeHead(200, { 'Content-Type': 'application/json' });
-      res.end(JSON.stringify({ pongs }));
+      console.log('Query succeeded, pongs:', pongs);
+      res.writeHead(200, { 'Content-Type': 'text/plain' }); // Simplified to text
+      res.end(`Pongs: ${pongs}`);
     } catch (err) {
-      console.error('Database error:', err);
+      console.error('Database error:', err.stack);
       res.writeHead(500, { 'Content-Type': 'text/plain' });
       res.end('Error updating counter');
     } finally {
       try {
         client.release();
+        console.log('Client released successfully');
       } catch (releaseErr) {
-        console.error('Error releasing client:', releaseErr);
+        console.error('Error releasing client:', releaseErr.stack);
       }
     }
   } else {
     res.writeHead(404, { 'Content-Type': 'text/plain' });
     res.end('Not Found');
   }
-}).listen(process.env.PORT || 80, () => {
-  console.log(`Ping pong app listening on port ${process.env.PORT || 80}`);
+}).listen(process.env.PORT, () => {
+  console.log(`Ping pong app listening on port ${process.env.PORT}`);
   initializeCounter().catch(err => console.error('Failed to initialize counter:', err));
 });
