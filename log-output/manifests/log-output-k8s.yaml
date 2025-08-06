@@ -25,6 +25,16 @@ spec:
             configMapKeyRef:
               name: log-output-config
               key: MESSAGE
+        - name: PINGPONG_URL
+          valueFrom:
+            configMapKeyRef:
+              name: log-output-config
+              key: PINGPONG_URL
+        - name: LOG_OUTPUT_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: log-output-config
+              key: LOG_OUTPUT_PORT
         volumeMounts:
         - name: config-volume
           mountPath: "/app/config"
