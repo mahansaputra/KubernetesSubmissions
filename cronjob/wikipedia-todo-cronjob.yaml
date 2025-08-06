@@ -19,3 +19,4 @@ spec:
               URL=$(curl -s -I https://en.wikipedia.org/wiki/Special:Random | grep -i location | awk '{print $2}' | tr -d '\r')
               echo "Todo: Read $URL"
           restartPolicy: OnFailure
+          successfulJobsHistoryLimit: 5
