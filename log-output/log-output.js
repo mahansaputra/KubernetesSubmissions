@@ -3,8 +3,8 @@ const axios = require('axios');
 const { v4: uuidv4 } = require('uuid');
 const fs = require('fs');
 
-const logOutputPort = 80;
-const pingPongUrl = 'http://pingpong-service:80/pingpong';
+const logOutputPort = process.env.LOG_OUTPUT_PORT;
+const pingPongUrl = process.env.PINGPONG_URL;
 
 let currentUuid = uuidv4();
 
