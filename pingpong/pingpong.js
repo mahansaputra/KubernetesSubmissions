@@ -2,11 +2,11 @@ const http = require('http');
 const { Pool } = require('pg');
 
 const pool = new Pool({
-  user: process.env.POSTGRES_USER,
-  host: process.env.POSTGRES_HOST,
-  database: process.env.POSTGRES_DB,
-  password: process.env.POSTGRES_PASSWORD ,
-  port: process.env.POSTGRES_PORT,
+  user: process.env.POSTGRES_USER || 'admin',
+  host: process.env.POSTGRES_HOST || 'postgres',
+  database: process.env.POSTGRES_DB || 'pingpongdb',
+  password: process.env.POSTGRES_PASSWORD || 'password',
+  port: process.env.POSTGRES_PORT || 5432,
   max: 10,
   idleTimeoutMillis: 30000,
   connectionTimeoutMillis: 2000,
@@ -34,7 +34,7 @@ http.createServer(async (req, res) => {
       const result = await client.query('UPDATE counters SET pongs = pongs + 1 RETURNING pongs');
       const pongs = result.rows[0].pongs;
       console.log('Query succeeded, pongs:', pongs);
-      res.writeHead(200, { 'Content-Type': 'text/plain' }); // Simplified to text
+      res.writeHead(200, { 'Content-Type': 'text/plain' });
       res.end(`Pongs: ${pongs}`);
     } catch (err) {
       console.error('Database error:', err.stack);
@@ -48,11 +48,14 @@ http.createServer(async (req, res) => {
         console.error('Error releasing client:', releaseErr.stack);
       }
     }
+  } else if (req.method === 'GET' && req.url === '/') {
+    res.writeHead(200, { 'Content-Type': 'text/plain' });
+    res.end('OK');
   } else {
     res.writeHead(404, { 'Content-Type': 'text/plain' });
     res.end('Not Found');
   }
-}).listen(process.env.PORT, () => {
-  console.log(`Ping pong app listening on port ${process.env.PORT}`);
+}).listen(process.env.PORT || 80, () => {
+  console.log(`Ping pong app listening on port ${process.env.PORT || 80}`);
   initializeCounter().catch(err => console.error('Failed to initialize counter:', err));
 });
