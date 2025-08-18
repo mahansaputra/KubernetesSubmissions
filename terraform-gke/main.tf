@@ -1,8 +1,9 @@
 # Configuring the Google Cloud provider
 provider "google" {
-  project = var.project_id
-  region  = "asia-southeast2"
-  zone    = "asia-southeast2-a"
+  project     = var.project_id
+  region      = "asia-southeast2"
+  zone        = "asia-southeast2-a"
+  credentials = file("/home/hansa/.config/gcloud/application_default_credentials.json") # Update with actual path
 }
 
 # Defining the GKE cluster resource
@@ -10,10 +11,7 @@ resource "google_container_cluster" "dwk_cluster" {
   name     = "dwk-cluster"
   location = "asia-southeast2-a"
 
-  # Setting the GKE version
-  release_channel {
-    channel = "SPECIFIC"
-  }
+  # Setting the specific GKE version
   min_master_version = "1.32"
 
   # Configuring the node pool
