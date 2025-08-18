@@ -14,6 +14,9 @@ resource "google_container_cluster" "dwk_cluster" {
   # Setting the specific GKE version
   min_master_version = "1.32"
 
+  # Disable deletion protection
+  deletion_protection = false
+
   # Configuring the node pool
   node_pool {
     name       = "default-pool"
