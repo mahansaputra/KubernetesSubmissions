@@ -48,7 +48,7 @@ jobs:
           project_id: ${{ env.PROJECT_ID }}
 
       - name: From the image name
-        run: echo "IMAGE_TAG=$REGISTRY/$PROJECT_ID/$REPOSITORY/$IMAGE:$BRANCH"-$GITHUB_SHA" >> $GITHUB_ENV
+        run: echo "IMAGE_TAG=$REGISTRY/$PROJECT_ID/$REPOSITORY/$IMAGE:$BRANCH-$GITHUB_SHA" >> $GITHUB_ENV
 
       - name: Build Docker image
         run: docker build -t $IMAGE_TAG .
