@@ -35,10 +35,31 @@ jobs:
       - name: Set up Cloud SDK
         uses: google-github-actions/setup-gcloud@v2
 
+      - name: Debug Project ID
+        run: |
+          echo "Project ID: $PROJECT_ID"
+          echo "GKE Cluster: $GKE_CLUSTER"
+          echo "GKE Zone: $GKE_ZONE"
+          echo "Registry: $REGISTRY"
+          echo "Repository: $REPOSITORY"
+          echo "Image: $IMAGE"
+          echo "Service: $SERVICE"
+          echo "Branch: $BRANCH"
+          echo "GKE Cluster: $GKE_CLUSTER"
+          echo "GKE Zone: $GKE_ZONE"
+
+      - name: Configure Docker Authentication
+        run: |
+          gcloud auth configure-docker $REGISTRY --quiet
+          echo "Docker authentication configured for $REGISTRY"
+
+      - name: Verify Authentication
+        run: |
+          gcloud auth list
+          docker info
+
       - name: Use gcloud CLI
         run: gcloud info
-
-      - run: gcloud --quiet auth configure-docker
 
       - name: Get GKE credentials
         uses: google-github-actions/get-gke-credentials@v2
@@ -47,11 +68,11 @@ jobs:
           location: ${{ env.GKE_ZONE }}
           project_id: ${{ env.PROJECT_ID }}
 
-      - name: From the image name
+      - name: Form the image name
         run: echo "IMAGE_TAG=$REGISTRY/$PROJECT_ID/$REPOSITORY/$IMAGE:$BRANCH-$GITHUB_SHA" >> $GITHUB_ENV
 
       - name: Build Docker image
-        run: docker build -t $IMAGE_TAG index-pipeline/
+        run: docker build -t $IMAGE_TAG .
 
       - name: Push Docker image
         run: docker push $IMAGE_TAG
