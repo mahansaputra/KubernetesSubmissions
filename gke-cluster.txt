@@ -4,3 +4,6 @@ if error do this:
 gcloud services enable container.googleapis.com
 
 gcloud container clusters get-credentials dwk-cluster --zone=asia-southeast2-a
+
+to get kube config for freelens
+kubectl config view --minify --raw
