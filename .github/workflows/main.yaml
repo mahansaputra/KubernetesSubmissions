@@ -86,9 +86,13 @@ jobs:
       - name: Set up Kustomize
         uses: imranismail/setup-kustomize@v2.1.0
 
+      - name: List Directory
+        run: ls -la index-pipeline/
+
       - name: Deploy to GKE
         run: |-
-          kustomize edit set image PROJECT/IMAGE=$IMAGE_TAG --kustomization-path index-pipeline/
-          kustomize build index-pipeline/ | kubectl apply -f -
+          kustomize edit set image PROJECT/IMAGE=$IMAGE_TAG
+          kustomize build . | kubectl apply -f -
           kubectl rollout status deployment $SERVICE
           kubectl get services -o wide
+        working-directory: index-pipeline/
