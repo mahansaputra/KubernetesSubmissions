@@ -6,3 +6,4 @@ resources:
 images:
   - name: PROJECT/IMAGE
     newName: jakousa/colorcontent
+namespace: exercises
